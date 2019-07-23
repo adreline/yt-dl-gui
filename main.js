@@ -50,7 +50,7 @@ ipcMain.on('form:data',function(e,data){
 index.webContents.send('task:add',{name:'>> Reading Name <<',url: data.url,format: data.format,id: id,status: 'Added'});
 run_cmd(-1,'temp/youtube-dl',['-e',data.url],function(output){
   index.webContents.send('ytdl:name',{name:output,id:id});
-  run_cmd(id,'temp/youtube-dl',['-x','--audio-format',data.format,'--audio-quality','0',data.url],function(output){
+  run_cmd(id,'temp/youtube-dl',['--ffmpeg-location','temp','-x','--audio-format',data.format,'--audio-quality','0',data.url],function(output){
     index.webContents.send('ytdl:completed',{id:id});
   });
 });
