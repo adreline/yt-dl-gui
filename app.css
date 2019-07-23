@@ -1,0 +1,22 @@
+
+::-webkit-scrollbar { display: none; }
+.label{
+  color:#d2d2d2;
+}
+#exit:hover{
+  color: #ed2553;
+}
+.is-centered{
+  margin-left: auto;
+  margin-right: auto;
+}
+.hero-body{
+  padding-top:1rem;
+}
+.hero-head{
+  padding-top:2rem;
+}
+.navbar-item{
+  padding-left: 1.1rem;
+  padding-right: 1.1rem;
+}

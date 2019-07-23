@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="seti.css" />
+    <link rel="stylesheet" type="text/css" href="app.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <title>Kettle</title>
+  </head>
+  <body class="has-navbar-fixed-top" style="background:#0e0e10;padding-bottom:262px;">
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation" style="-webkit-app-region: drag">
+      <div class="navbar-brand"></div>
+      <div class="navbar-menu">
+        <div class="navbar-start"></div>
+        <div class="navbar-end">
+          <a id="minimize" class="navbar-item" style="-webkit-app-region: no-drag">
+            <i class="far fa-window-minimize"></i>
+          </a>
+          <a id="exit" class="navbar-item" style="-webkit-app-region: no-drag;padding-right:1.5rem;">
+            <i class="fas fa-times"></i>
+          </a>
+        </div>
+      </div>
+    </nav>
+<section class="section">
+  <div class="columns">
+    <div class="column is-4">
+      <div class="box">
+        <div class="title">
+          <h1>Add Task</h1>
+        </div>
+        <form class="form-horizontal" id="form">
+        <div class="field">
+          <label for="title" class="label">URL</label>
+        <div class="control">
+          <input id="url" class="input" type="text" placeholder="https://www.youtube.com/watch?v=..." required>
+        </div>
+
+        <div class="field">
+          <label class="label">Format</label>
+          <div class="control">
+            <div class="select">
+              <select id="format">
+                <option>mp3</option>
+                <option>flac</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <label for="span" class="label"></label>
+        <div class="control">
+        <button type="submit" class="button is-primary">Add</button>
+        </div>
+        </div>
+      </form>
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        <div class="title">
+          <h1>File queue</h1>
+        </div>
+        <table class="table is-fullwidth">
+          <thead>
+            <tr>
+              <th>URL</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Format</th>
+              <th>Progress</th>
+            </tr>
+          </thead>
+          <tbody id="tab-body">
+            <!-- TASKS GO HERE -->
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  var ipcRenderer = require('electron').ipcRenderer;
+  var task = require('./task');
+
+  document.getElementById('exit').addEventListener('click',function(e){
+    ipcRenderer.send('app:exit');
+  });
+  document.getElementById('minimize').addEventListener('click',function(e){
+    ipcRenderer.send('app:minimize');
+  });
+  //send task data to main js
+  var form = document.getElementById('form');
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var url = document.getElementById('url').value;
+    var format = document.getElementById('format').value;
+    ipcRenderer.send('form:data',{url: url,format: format});
+    document.getElementById('url').value='';
+  });
+
+//receive task to render on screen
+  ipcRenderer.on('task:add', function (event,data) {
+    var table = document.getElementById('tab-body');
+    var component = task.renderTask(data.url,data.name,data.format,data.id);
+    table.appendChild(component);
+  });
+//receive name from main process
+ipcRenderer.on('ytdl:name', function (event,data) {
+  console.log(data);
+var task = document.getElementById(data.id);
+task.childNodes[1].innerHTML=data.name;
+});
+//receive download complete signal
+ipcRenderer.on('ytdl:completed', function (event,data) {
+console.log(data);
+var task = document.getElementById(data.id);
+task.childNodes[2].childNodes[0].innerHTML='Completed';
+task.childNodes[2].childNodes[0].setAttribute('class','tag is-success is-small');
+});
+//receive download progress
+ipcRenderer.on('ytdl:progress', function (event,data) {
+console.log(data);
+var task = document.getElementById(data.id);
+task.childNodes[4].innerHTML=data.prog;
+});
+//receive end of downloading and conversion starts
+ipcRenderer.on('ytdl:converting', function (event,data) {
+console.log(data);
+var task = document.getElementById(data.id);
+task.childNodes[2].childNodes[0].innerHTML='Converting';
+});
+</script>
+
+  </body>
+</html>
