@@ -11,8 +11,16 @@
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation" style="-webkit-app-region: drag">
       <div class="navbar-brand"></div>
       <div class="navbar-menu">
-        <div class="navbar-start"></div>
+        <!--NAVBAR-->
+        <div class="navbar-start">
+          <!--navbar start, open add task window-->
+          <a id="add-task" class="navbar-item" style="-webkit-app-region: no-drag">
+            <i class="fas fa-plus"></i>
+            <span>&nbsp;&nbsp;New</span>
+          </a>
+        </div>
         <div class="navbar-end">
+          <!-- minimize and exit, navar end -->
           <a id="minimize" class="navbar-item" style="-webkit-app-region: no-drag">
             <i class="far fa-window-minimize"></i>
           </a>
@@ -23,39 +31,6 @@
       </div>
     </nav>
 <section class="section">
-  <div class="columns">
-    <div class="column is-4">
-      <div class="box">
-        <div class="title">
-          <h1>Add Task</h1>
-        </div>
-        <form class="form-horizontal" id="form">
-        <div class="field">
-          <label for="title" class="label">URL</label>
-        <div class="control">
-          <input id="url" class="input" type="text" placeholder="https://www.youtube.com/watch?v=..." required>
-        </div>
-
-        <div class="field">
-          <label class="label">Format</label>
-          <div class="control">
-            <div class="select">
-              <select id="format">
-                <option>mp3</option>
-                <option>flac</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <label for="span" class="label"></label>
-        <div class="control">
-        <button type="submit" class="button is-primary">Add</button>
-        </div>
-        </div>
-      </form>
-      </div>
-    </div>
-    <div class="column">
       <div class="box">
         <div class="title">
           <h1>File queue</h1>
@@ -76,8 +51,6 @@
         </table>
 
       </div>
-    </div>
-  </div>
 </section>
 
 
@@ -90,15 +63,6 @@
   });
   document.getElementById('minimize').addEventListener('click',function(e){
     ipcRenderer.send('app:minimize');
-  });
-  //send task data to main js
-  var form = document.getElementById('form');
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var url = document.getElementById('url').value;
-    var format = document.getElementById('format').value;
-    ipcRenderer.send('form:data',{url: url,format: format});
-    document.getElementById('url').value='';
   });
 
 //receive task to render on screen
@@ -131,6 +95,10 @@ ipcRenderer.on('ytdl:converting', function (event,data) {
 console.log(data);
 var task = document.getElementById(data.id);
 task.childNodes[2].childNodes[0].innerHTML='Converting';
+});
+//open add task window
+document.getElementById('add-task').addEventListener('click',function(e){
+ipcRenderer.send('open:addvid');
 });
 </script>
 

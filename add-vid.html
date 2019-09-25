@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="seti.css" />
+    <link rel="stylesheet" type="text/css" href="app.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <title>Add Task</title>
+  </head>
+  <body class="has-navbar-fixed-top" style="background:#0e0e10;padding-bottom:262px;">
+    <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation" style="-webkit-app-region: drag">
+      <div class="navbar-brand">
+        <a id="minimize" class="navbar-item" style="-webkit-app-region: no-drag">
+          <i class="far fa-window-minimize"></i>
+        </a>
+        <a id="exit" class="navbar-item" style="-webkit-app-region: no-drag;padding-right:1.5rem;">
+          <i class="fas fa-times"></i>
+        </a>
+      </div>
+    </nav>
+  <div class="box">
+    <form class="form-horizontal" id="form">
+    <div class="field">
+      <label for="title" class="label">URL</label>
+    <div class="control">
+      <input id="url" class="input" type="text" placeholder="https://www.youtube.com/watch?v=..." required>
+    </div>
+
+    <!-- Format selection -->
+    <div class="columns is-mobile">
+      <div class="column">
+        <div class="field">
+          <label class="label">Format</label>
+          <div class="control">
+            <div class="select">
+              <select id="video-format">
+                <option>3gp</option>
+                <option>flv</option>
+                <option>m4a</option>
+                <option>mp4</option>
+                <option>webm</option>
+              </select>
+              <select id="audio-format" class="is-hidden">
+                <option>mp3</option>
+                <option>flac</option>
+                <option>aac</option>
+                <option>ogg</option>
+                <option>wav</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column">
+        <label for="span" class="label">Change mode</label>
+        <div class="control">
+          <a id="switch-type" class="button is-info">Audio</a>
+        </div>
+      </div>
+    </div>
+    <label for="span" class="label"></label>
+    <div class="control">
+    <button type="submit" class="button is-primary">Add</button>
+    </div>
+    </div>
+  </form>
+  </div>
+
+
+<script>
+  var ipcRenderer = require('electron').ipcRenderer;
+  var task = require('./task');
+
+  document.getElementById('exit').addEventListener('click',function(e){
+    ipcRenderer.send('addvid:exit');
+    //close window here
+  });
+  document.getElementById('minimize').addEventListener('click',function(e){
+    //minimise window here
+    ipcRenderer.send('addvid:minimize');
+  });
+  //switch from audio only to video download mode
+  document.getElementById('switch-type').addEventListener('click',function(e){
+    console.log('switching..');
+    var btn = document.getElementById('switch-type');
+    var aud = document.getElementById('audio-format');
+    var vid = document.getElementById('video-format');
+    if (btn.innerHTML=='Audio') {
+      btn.innerHTML='Video';
+      aud.classList.remove("is-hidden");
+      vid.classList.add("is-hidden");
+    }else {
+      btn.innerHTML='Audio';
+      vid.classList.remove("is-hidden");
+      aud.classList.add("is-hidden");
+    }
+  });
+  //send task data to main js
+  var form = document.getElementById('form');
+  form.addEventListener('submit',function(e){
+    console.log('submit');
+    e.preventDefault();
+    var url = document.getElementById('url').value;
+    var format = document.getElementById('audio-format').value;
+    var mode = 'audio';
+    if (document.getElementById('switch-type').innerHTML=='Audio') {
+      mode = 'video';
+      format = document.getElementById('video-format').value;
+    }
+    ipcRenderer.send('form:data',{url: url,format: format,mode:mode});
+    document.getElementById('url').value='';
+    //here close the window
+    ipcRenderer.send('addvid:exit');
+  });
+
+</script>
+
+  </body>
+</html>
