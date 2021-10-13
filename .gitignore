@@ -1,2 +1,4 @@
 /node_modules
 /release-builds
+temp/ffmpeg.exe
+temp/youtube-dl.exe
