@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package-mac": "electron-packager . ytdl --overwrite --platform=darwin --arch=x64 --icon=icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . ytdl --overwrite --asar=true --platform=win32 --arch=ia32 --icon=icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"ytdl\"",
-    "package-linux": "electron-packager . ytdl --overwrite --asar=true --platform=linux --arch=x64 --icon=icon.png --prune=true --out=release-builds"
+    "package-mac": "electron-packager . ytdl --overwrite --platform=darwin --arch=x64 --icon=res/ico/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . ytdl --overwrite --asar=true --platform=win32 --arch=ia32 --icon=res/ico/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"ytdl\"",
+    "package-linux": "electron-packager . ytdl --overwrite --asar=true --platform=linux --arch=x64 --icon=res/ico/icon.png --prune=true --out=release-builds"
   },
   "author": "nightchill",
   "license": "ISC",

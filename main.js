@@ -39,7 +39,7 @@ app.on('ready', function(){
   });
   //this is how a window is loaded with HTML
   index.loadURL(url.format({
-    pathname: path.join(__dirname,'index.html'),
+    pathname: path.join(__dirname,'html/index.html'),
     protocol:'file',
     slashes: true
   }));
@@ -69,7 +69,7 @@ ipcMain.on('open:addvid',function(e){//this is how main process listens for sign
    });
    //load it
    add_vid.loadURL(url.format({
-     pathname: path.join(__dirname,'add-vid.html'),
+     pathname: path.join(__dirname,'html/add-vid.html'),
      protocol:'file',
      slashes: true
    }));
