@@ -7,6 +7,7 @@ let heap;//for setting unique id to tasks
 heap=0;
 let add_vid;
 process.env.NODE_ENV = 'production';
+//This makes web dev tools avaiable on ctrl+D shortcut
 const mainMenuTemplate=[
   {
     label: 'dev',
@@ -22,9 +23,9 @@ const mainMenuTemplate=[
   }
 ];
 //main window handle
+//this is main app funtion, fires first
 app.on('ready', function(){
-
- //index.html
+ //this is how widow parameters are defined
   index = new BrowserWindow({
     backgroundColor: '#0e0e10',
     width: 1200,
@@ -32,9 +33,11 @@ app.on('ready', function(){
      frame: false,
      maxHeight: 690,
     webPreferences: {
-    nodeIntegration: true
+    nodeIntegration: true,
+    contextIsolation: false
   }
   });
+  //this is how a window is loaded with HTML
   index.loadURL(url.format({
     pathname: path.join(__dirname,'index.html'),
     protocol:'file',
@@ -43,24 +46,25 @@ app.on('ready', function(){
 //dev tools
 const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
 Menu.setApplicationMenu(mainMenu);
-//exit gracefuly
+//handle app close signal and exit gracefuly
 index.on('close',function(){
   console.log('shutting off');
   app.quit();
 });
+//app main function ends here
 });
 //open add vid window
-ipcMain.on('open:addvid',function(e){
-  //add-vid.html
-  //set it up
+ipcMain.on('open:addvid',function(e){//this is how main process listens for signals from window html files
+//structure which holds initial parameters for a window
    add_vid = new BrowserWindow({
      backgroundColor: '#0e0e10',
      width: 420,
       height: 290,
       frame: false,
       maxHeight: 690,
-     webPreferences: {
-     nodeIntegration: true
+     webPreferences: { //this webPrefs. are supposed to enable node js inside html window
+     nodeIntegration: true,
+     contextIsolation: false
    }
    });
    //load it

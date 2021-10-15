@@ -11,10 +11,9 @@
   },
   "author": "nightchill",
   "license": "ISC",
-  "dependencies": {
-    "electron": "^5.0.7"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "electron": "^15.2.0",
     "electron-packager": "^14.0.2"
   }
 }
