@@ -2,8 +2,8 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="seti.css" />
-    <link rel="stylesheet" type="text/css" href="app.css" />
+    <link rel="stylesheet" type="text/css" href="css/seti.css" />
+    <link rel="stylesheet" type="text/css" href="css/app.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <title>yt-downloader GUI</title>
   </head>
@@ -21,6 +21,9 @@
         </div>
         <div class="navbar-end">
           <!-- minimize and exit, navar end -->
+          <a id="settings" class="navbar-item" style="-webkit-app-region: no-drag">
+            <i class="fas fa-cog"></i>
+          </a>
           <a id="minimize" class="navbar-item" style="-webkit-app-region: no-drag">
             <i class="far fa-window-minimize"></i>
           </a>
@@ -30,33 +33,33 @@
         </div>
       </div>
     </nav>
-<section class="section">
-      <div class="box">
-        <div class="title">
-          <h1>File queue</h1>
-        </div>
-        <table class="table is-fullwidth">
-          <thead>
-            <tr>
-              <th>URL</th>
-              <th>Name</th>
-              <th>Status</th>
-              <th>Format</th>
-              <th>Progress</th>
-            </tr>
-          </thead>
-          <tbody id="tab-body">
-            <!-- TASKS GO HERE -->
-          </tbody>
-        </table>
+  <section class="section">
+        <div class="box">
+          <div class="title">
+            <h1>File queue</h1>
+          </div>
+          <table class="table is-fullwidth">
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Format</th>
+                <th>Progress</th>
+              </tr>
+            </thead>
+            <tbody id="tab-body">
+              <!-- TASKS GO HERE -->
+            </tbody>
+          </table>
 
-      </div>
-</section>
+        </div>
+  </section>
 
 
 <script>
   var ipcRenderer = require('electron').ipcRenderer;
-  var task = require('./task');
+  var task = require('../task');
 
   document.getElementById('exit').addEventListener('click',function(e){
     ipcRenderer.send('app:exit');
@@ -64,7 +67,9 @@
   document.getElementById('minimize').addEventListener('click',function(e){
     ipcRenderer.send('app:minimize');
   });
-
+  document.getElementById('settings').addEventListener('click',function(e){
+    ipcRenderer.send('app:settings');
+  });
 //receive task to render on screen
   ipcRenderer.on('task:add', function (event,data) {
     var table = document.getElementById('tab-body');

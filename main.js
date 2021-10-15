@@ -39,7 +39,7 @@ app.on('ready', function(){
   });
   //this is how a window is loaded with HTML
   index.loadURL(url.format({
-    pathname: path.join(__dirname,'index.html'),
+    pathname: path.join(__dirname,'html/index.html'),
     protocol:'file',
     slashes: true
   }));
@@ -52,6 +52,26 @@ index.on('close',function(){
   app.quit();
 });
 //app main function ends here
+});
+//open settings window
+ipcMain.on('app:settings',function(e){
+   add_vid = new BrowserWindow({
+     backgroundColor: '#0e0e10',
+     width: 600,
+      height: 600,
+      frame: false,
+      maxHeight: 690,
+     webPreferences: { //this webPrefs. are supposed to enable node js inside html window
+     nodeIntegration: true,
+     contextIsolation: false
+   }
+   });
+   //load it
+   add_vid.loadURL(url.format({
+     pathname: path.join(__dirname,'html/settings.html'),
+     protocol:'file',
+     slashes: true
+   }));
 });
 //open add vid window
 ipcMain.on('open:addvid',function(e){//this is how main process listens for signals from window html files
@@ -69,7 +89,7 @@ ipcMain.on('open:addvid',function(e){//this is how main process listens for sign
    });
    //load it
    add_vid.loadURL(url.format({
-     pathname: path.join(__dirname,'add-vid.html'),
+     pathname: path.join(__dirname,'html/add-vid.html'),
      protocol:'file',
      slashes: true
    }));
